@@ -1,0 +1,144 @@
+<html>
+    <head>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" type="text/css" href="bootstrap/dist/css/bootstrap.css">
+        <!-- Custom CSS-->
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <!-- FontAwesome CSS-->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+        <!--jQuery CDN-->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <!-- Popper CDN -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <!-- Bootstrap JS -->
+        <script src="bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+
+        <!-- Script  -->
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index.html">A-Team TaskList v1.0 by Jake Thornton</a>
+                </div>
+            </nav>
+            <div id="page-wrapper" style="height: 90%">
+                <!-- This row will have all of our notifications about tasks that need to be completed-->
+                <div class="row">
+                    <div class="col-lg-12">
+                            <h1 class="page-header">Dashboard</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="panel panel-primary-urgent">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fas fa-exclamation-triangle fa-5x" style="padding-left: 1rem"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right" style="padding-left:2rem">
+                                        <div class="reminder-huge">5</div>
+                                        <div>Urgent Tasks!</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="panel panel-primary-daily">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="far fa-calendar fa-5x" style="padding-left: 1rem"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right" style="padding-left:2rem">
+                                        <div class="reminder-huge">3</div>
+                                        <div>Daily Tasks!</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="panel panel-primary-tasks">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fas fa-tasks fa-5x" style="padding-left: 1rem"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right" style="padding-left:2rem">
+                                        <div class="reminder-huge">3</div>
+                                        <div>Tasks!</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="panel panel-primary-completed">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fas fa-check-circle fa-5x" style="padding-left: 1rem"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right" style="padding-left:2rem">
+                                        <div class="reminder-huge">3</div>
+                                        <div>Completed Tasks!</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-8 align-self-center">
+                        <div class="task-table">
+                            <table class="table" id="taskList" style="text-align: center">
+                                <thead>
+                                    <tr>
+                                        <th>Priority</th>
+                                        <th>Task Name</th>
+                                        <th>Issuer</th>
+                                        <th>Completion Code</th>
+                                        <th>Completed</th>
+                                        <th>Completed By</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><i class="fas fa-exclamation-triangle fa-2x" style="color:#f31431;"></i></td>
+                                        <td>Clean Tables</td>
+                                        <td>Michelle</td>
+                                        <td>0458</td>
+                                        <td>Not Completed!</td>
+                                        <td>N/A</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-check-circle fa-2x" style="color:#daa520;"></i></td>
+                                        <td>Open Office</td>
+                                        <td>Michelle</td>
+                                        <td>0435</td>
+                                        <td>6/1/2018 4:57PM EST</td>
+                                        <td>Jake</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        </div>
+        <script src="js/taskcodegenerator.js" type="text/javascript"></script>
+        <script src="js/task.js" type="text/javascript"></script>
+        <script src="js/widgets/tasklist.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            var t = new Task.Builder(
+                Priority.PRIORITY_URGENT,
+                "Make a cool task program",
+                "Jake"
+            );
+            console.log(t);
+        </script>
+    </body>
+</html>

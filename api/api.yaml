@@ -1,0 +1,43 @@
+openapi: 3.0.0
+swagger: 2
+info:
+  version: '1.0.0'
+  title: 'TaskManagement'
+  description: 'A-Team Task List Management API'
+servers: 
+# Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/FLPolyAdmissions/TaskManagementAPI/1.0.0
+  - url: https://api.example.com/v1
+paths:
+  /tasks:
+    get:
+      summary: Grabs a task from the database
+      operationId: getTask
+      description: |
+        Search for a task in the database of tasks.
+      parameters: 
+        - in: query
+          name: searchString
+          description: pass an optional search string for looking up tasks
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A task was found matching the criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskItem'
+        '400':
+          description: Bad input
+components:
+  schemas:
+    TaskItem:
+      type: object
+      required:
+        - id
+        - name
