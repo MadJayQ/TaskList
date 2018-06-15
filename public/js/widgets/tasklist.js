@@ -34,9 +34,15 @@ function populateTaskList() {
 
 
 $(() => {
+    var source = new EventSource('/events');
+    source.onmessage = (e) => {
+        document.write(e.data);
+    } 
+    /*
     requestAnimationFrame(
         () => {
             populateTaskList();
         }
     )
+    */
 });

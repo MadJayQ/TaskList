@@ -1,0 +1,31 @@
+---
+swagger: "2.0"
+info:
+  description: "Test"
+  version: "1.0.1"
+  title: "TaskManagement"
+paths:
+  /task:
+    get:
+      summary: "t"
+      description: "t"
+      operationId: "taskGET"
+      parameters:
+      - name: "taskGUID"
+        in: "query"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+    post:
+      summary: "t"
+      description: "t"
+      operationId: "taskPOST"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Default"
+definitions: {}
