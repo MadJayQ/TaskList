@@ -5,7 +5,17 @@ class _TaskList_  {
     }
 
     addTask(task) {
-        this.tableBody.append(task.stringify());
+        var builtTask = new Task.Builder().fromJSON(task);
+        this.tasks[builtTask.taskID] = builtTask;
+    }
+
+    addAllTasks() {
+        this.tableBody.empty();
+        for(var i = 0; i < this.tasks.length; i++) {
+            var task = this.tasks[i];
+            console.log(task);
+            this.tableBody.append(task.stringify());
+        }
     }
 }
 
@@ -36,13 +46,11 @@ function populateTaskList() {
 $(() => {
     var source = new EventSource('/events');
     source.onmessage = (e) => {
-        document.write(e.data);
-    } 
-    /*
-    requestAnimationFrame(
-        () => {
-            populateTaskList();
+        var parsedTasks = JSON.parse(e.data);
+        for(var taskKey in parsedTasks) {
+            var task = parsedTasks[taskKey];
+            TaskList.getInstance().addTask(task);
         }
-    )
-    */
+        TaskList.getInstance().addAllTasks();
+    } 
 });

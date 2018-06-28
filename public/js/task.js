@@ -58,11 +58,11 @@ class Task {
             },
             'code': {
                 value: code,
-                writable: false //Private
+                writable: true //Private
             },
             'taskID': {
                 value: taskID,
-                writable: false
+                writable: true
             }
         }); 
     }
@@ -73,6 +73,17 @@ class Task {
             this.rowContainer.childNodes = new Array();
             this.rowContainer = this.stringify();
         }
+    }
+
+    serialize() {
+        var ret = {
+            name: this.name,
+            priority: this.priority,
+            owner: this.owner,
+            code: this.code,
+            taskID: this.taskID
+        };
+        return JSON.stringify(ret);
     }
     
     stringify() {
@@ -127,16 +138,37 @@ class Task {
                 this.priority = priority;
                 this.name = name;
                 this.owner = owner;
-                this.taskID = TaskCodeGenerator.GenerateID();
+                if(typeof module !== 'undefined') {
+                    var _TaskCodeGenerator = require('./taskcodegenerator');
+                    this.taskID = _TaskCodeGenerator.getInstance().GenerateID();
+                } else {
+                    this.taskID = TaskCodeGenerator.getInstance().GenerateID();
+                }
                 this.code = "0000";
             }
 
             build() {
                 var task = new Task(this);
-                TaskList.getInstance().addTask(task);
+                //TaskList.getInstance().addTask(task);
                 return task;
+            }
+
+            fromJSON(json) {
+                var dat = JSON.parse(json);
+                this.priority = dat.priority;
+                this.name = dat.name;
+                this.owner = dat.owner;
+                var t = this.build();
+                t.code = dat.code;
+                t.taskID = dat.taskID;
+                return t;
             }
         }
         return Builder;
     }
+}
+
+if(typeof module !== 'undefined') {
+    module.exports.Task = Task;
+    module.exports.Priority = Priority;
 }
