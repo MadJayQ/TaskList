@@ -98,9 +98,16 @@ rtm.on('message', (message) => {
     }
 });
 rtm.start();
+web.chat.postMessage(bot_token, 'GBNB2QC8P', 'Test!');
+web.channels.list((err, data) => {
+    console.log("received");
+    if (err) {
+        console.error('web.users.list Error:', err);
+    } else {
+        console.log(data);
+    }
+});
     
-// Handle errors (see `errorCodes` export)
-slackEvents.on('error', console.error);
 app.route('/webhooks/inbound-sms').get(handleInboundSMS).post(handleInboundSMS);
 app.get('/', (req, res) => { res.sendFile('index.html', {root: __dirname});});
 app.post('/write-file', (req, res) => {
