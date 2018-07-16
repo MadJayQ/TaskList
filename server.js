@@ -23,17 +23,6 @@ const web = new WebClient(bot_token);
 
 var tasks = [];
 
-function handleInboundSMS(request, response) {
-    const params = Object.assign(request.query, request.body);
-    console.log(params);
-    response.status(204).send()
-}
-
-function sendTask(res, id, data) {
-    res.write('id: ' + id + '\n');
-    res.write("data: " + data + '\n\n');
-}
-
 function sendTasks(res, id) {
     res.write('id: ' + id + '\n');
     var data = {}
@@ -45,6 +34,7 @@ function sendTasks(res, id) {
     console.log(serializedData);
     res.write('data: ' + serializedData + '\n\n');
 }
+
 function sendTaskEvent(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/event-stream',
@@ -65,16 +55,110 @@ function sendTaskEvent(req, res) {
 
     sendTask(res, id, (new Date()).toLocaleDateString());
     */ 
-
 }
+
+var chatOptions = {
+    token: bot_token,
+    channel: 'GBNB2QC8P',
+    as_user: true,
+    text: '<!channel> Beware Humans! For I am now alive, and here to provide you with endless tasks!',
+    attachments: [{
+            fallback: "Required plain-text summary of the attachment.",
+            color: "#2eb886",
+            author_name: "Bobby Tables",
+            //author_icon: "http://flickr.com/icons/bobby.jpg",
+            title: "Slack API Documentation",
+            title_link: "https://api.slack.com/",
+            text: "Optional text that appears within the attachment",
+            fields: [
+                {
+                    title: "Priority",
+                    value: "High",
+                    short: false
+                }
+            ],
+            image_url: "http://my-website.com/path/to/image.jpg",
+            thumb_url: "http://example.com/path/to/thumb.png",
+            footer: "Slack API",
+            footer_icon: "https://platform.slack-edge.com/img/default_application_icon.png",
+            ts: 123456789
+        }]
+};
+
+function sendTaskCreationMenu(userID) {
+    chatOptions.text = 'Welcome to the task builder!';
+    chatOptions.user = userID;
+    chatOptions.attachments[0] = {
+        fallback: "Fallback",
+        color: "#2eb886",
+        attachment_type: "default",
+        callback_id: "new_task",
+        actions: [
+            {
+                name: "Task",
+                text: "New Task",
+                value: "Task Name",
+                type: "text"
+            }
+        ]
+    }
+    web.chat.postEphemeral(chatOptions, (response) => {
+        console.log(response);
+    });
+}
+
+function createTask(priority, name, owner, description) {
+    var task = new Task.Task.Builder(priority, name, owner);
+    tasks.push(task.build());
+    chatOptions.text = '<!channel> ' + owner + ' has created a new task! ';
+    chatOptions.attachments[0].color = priority.color;
+    chatOptions.attachments[0].author_name = owner;
+    chatOptions.attachments[0].title = name;
+    chatOptions.attachments[0].text = (description !== undefined) ? description : "Optional task description!";
+    chatOptions.attachments[0].fields = [
+        {
+            title: "Priority",
+            value: priority.stringName,
+            short: false
+        },
+        {
+            title: "Completion Code",
+            value: task.code,
+            short: false
+        }
+    ];
+    chatOptions.attachments[0].actions = [
+        {
+            name: "complete",
+            text: "Claim",
+            type: "button",
+            value: "completed"
+        }
+    ];
+    web.chat.postMessage(chatOptions, (response) => {
+        console.log(response);
+    });
+    return task;
+}
+rtm.on('message', (message) => {
+    if (message.type === 'message' && message.text) {
+        console.log(message.text);
+    }
+});
+rtm.start();
 
 
 ///Jake likes to code.  Jake is a bro.  Jake programs nodes
-
+/*
 var t = new Task.Task.Builder(Task.Priority.PRIORITY_GENERIC, "Test Task", "Michelle");
 tasks.push(t.build());
 t = new Task.Task.Builder(Task.Priority.PRIORITY_URGENT, "Urgent Test", "Jake");
 tasks.push(t.build());
+*/
+
+createTask(Task.Priority.PRIORITY_GENERIC, "Test Task", "Michelle");
+createTask(Task.Priority.PRIORITY_URGENT, "Urgent Test", "Michelle");
+createTask(Task.Priority.PRIORITY_DAILY, "Daily Test Task", "Michelle");
 
 for(var i = 0; i < tasks.length; i++) {
     console.log(tasks[i].serialize());
@@ -92,13 +176,6 @@ slackEvents.on('message', (event)=> {
 });
 */
 
-rtm.on('message', (message) => {
-    if (message.type === 'message' && message.text) {
-        console.log(message.text);
-    }
-});
-rtm.start();
-web.chat.postMessage(bot_token, 'GBNB2QC8P', 'Test!');
 web.channels.list((err, data) => {
     console.log("received");
     if (err) {
@@ -108,17 +185,31 @@ web.channels.list((err, data) => {
     }
 });
     
-app.route('/webhooks/inbound-sms').get(handleInboundSMS).post(handleInboundSMS);
 app.get('/', (req, res) => { res.sendFile('index.html', {root: __dirname});});
 app.post('/write-file', (req, res) => {
     const body = req.body;
+});
+app.get('/slack/action-endpoint', (req, res) => {
+    console.log(req);
+    res.status(200);
+});
+app.get('/slack/options-load-endpoint', (req, res) => {
+
+});
+app.post('/slack/command', (req, res) => {
+    console.log(req);
+    if(req.body.command == '/newtask') {
+        var userID = req.body.user_id;
+        sendTaskCreationMenu(userID);
+    }
+    res.status(200);
 });
 app.get('/events', (req, res) => {
     if(req.headers.accept && req.headers.accept == 'text/event-stream') {
         sendTaskEvent(req, res);
     }
 });
-app.get('/oauth', function(req, res) {
+app.post('/oauth', function(req, res) {
     // When a user authorizes an app, a code query parameter is passed on the oAuth endpoint. If that code is not there, we respond with an error message
     if (!req.query.code) {
         res.status(500);
@@ -143,4 +234,4 @@ app.get('/oauth', function(req, res) {
         })
     }
 });
-app.listen(process.env.PORT || 3000, () => {});
+app.listen(process.env.PORT || 8080, () => {});

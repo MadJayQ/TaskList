@@ -3,27 +3,32 @@ var Priority = {
     PRIORITY_URGENT: {
         id: 0,
         color: "#f31431",
-        icon: "fas fa-exclamation-triangle fa-2x"
+        icon: "fas fa-exclamation-triangle fa-2x",
+        stringName: "Urgent"
     },
     PRIORITY_DAILY: {
         id: 1,
         color: "#daa520",
-        icon: "far fa-calendar fa-2x"
+        icon: "far fa-calendar fa-2x",
+        stringName: "Daily"
     },
     PRIORITY_GENERIC: {
         id: 2,
         color: "#808285",
-        icon: "fas fa-tasks fa-2x"
+        icon: "fas fa-tasks fa-2x",
+        stringName: "Generic"
     },
     PRIORITY_COMPLETE: {
         id: 3,
         color: "#00a03d",
-        icon: "fas fa-check-circle fa-2x"
+        icon: "fas fa-check-circle fa-2x",
+        stringName: "Complete"
     },
     PRIORITY_MAX: {
         id: 4,
         color: "",
-        icon: ""
+        icon: "",
+        stringName: ""
     }
 }
 //jake is a dork! love lindsey! XD
