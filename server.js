@@ -85,7 +85,7 @@ var chatOptions = {
         }]
 };
 
-function sendTaskCreationMenu(userID) {
+function sendTaskCreationMenu(userID, taskName) {
     chatOptions.text = 'Welcome to the task builder!';
     chatOptions.user = userID;
     chatOptions.attachments[0] = {
@@ -93,6 +93,8 @@ function sendTaskCreationMenu(userID) {
         color: "#2eb886",
         attachment_type: "default",
         callback_id: "new_task",
+        title: taskName,
+        text: taskName,
         actions: [
             {
                 name: "Task",
@@ -134,7 +136,7 @@ function createTask(priority, name, owner, description) {
             type: "button",
             value: "completed"
         }
-    ];
+       ];
     web.chat.postMessage(chatOptions, (response) => {
         console.log(response);
     });
@@ -200,7 +202,7 @@ app.post('/slack/command', (req, res) => {
     console.log(req);
     if(req.body.command == '/newtask') {
         var userID = req.body.user_id;
-        sendTaskCreationMenu(userID);
+        sendTaskCreationMenu(userID, req.body.text);
     }
     res.status(200);
 });
